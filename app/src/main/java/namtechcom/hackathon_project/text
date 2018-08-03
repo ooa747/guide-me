@@ -1,0 +1,96 @@
+
+        Thread time = new Thread() {
+
+            public void run() {
+                try {
+                    sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    isconnected();
+                }
+            }
+        };
+        time.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+    public void isconnected() {
+        ConnectionDetector cd = new ConnectionDetector(this);
+
+        if (cd.isConnected()) {
+            //CurrentUser();
+            Intent i = new Intent(MainActivity.this ,face.class);
+            startActivity(i);
+        } else {
+            Intent i = new Intent(MainActivity.this, No_Internet.class);
+            startActivity(i);
+        }
+    }
+
+    public  void CurrentUser(){
+        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        final String username = sharedPreferences.getString("KEY_USERNAME","Not Available");
+        final String password = sharedPreferences.getString("KEY_PASSWORD","Not Available");
+
+        String url = "http://techchorse.esy.es/Login.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if(response.trim().equals("success")){
+                    // Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(MainActivity.this ,face.class);
+                    startActivity(i);
+                }else{
+                    // Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(MainActivity.this ,WelcomoActivity.class);
+                    startActivity(i);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                if (volleyError instanceof TimeoutError) {
+
+                }
+            }
+        }) {
+            @Override
+            public Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("username", username);
+                headers.put("password", password);
+                return headers;
+            }
+
+            @Override
+            public Priority getPriority() {
+                return Priority.IMMEDIATE;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+    Date currentTime = Calendar.getInstance().getTime();
+
+            SimpleDateFormat sdf = new SimpleDateFormat();
+            Calendar c = Calendar.getInstance();
+            String date = sdf.format(c.getTime());
+            try {
+                Date date1 = sdf.parse("03/08/2018");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            if (date1.comareTo sdf.format(c.getTime()))
+            {
+
+            }
